@@ -1,0 +1,41 @@
+﻿@using ProjetoWeb.Classes;
+@{ 
+    int validateCS = ValidateLogin();
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="~/CSS/style.css">
+    <title>Autenticando Login</title>
+</head>
+<body>
+    <h1 id="authResult" onclick="teste()">Place Holder</h1>
+    <script>
+            var validate;
+            validate = @validateCS;
+            if (validate == 1) {
+                document.getElementById("authResult").innerHTML = "Você se Logou com sucesso!";
+            }
+            else {
+                document.getElementById("authResult").innerHTML = "Erro ao efetuar Login";
+            }
+    </script>
+</body>
+</html>
+
+@{int ValidateLogin()
+    {
+        string motive;
+        if (BancoDeDados.Login(Request.Form["userLogin"], Request.Form["senhaLogin"], out motive) == true)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+}

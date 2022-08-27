@@ -1,0 +1,48 @@
+﻿.inputField {
+    background-color: antiquewhite;
+}
+
+body {
+    background-color: #8FE3CF;
+}
+
+.backgroundBlank {
+    background-color: #256D85;
+    margin: 0px auto;
+    width: 60%;
+    height: 90vh;
+    border: 3px solid black;
+    border-radius: 10px;
+    border-right: 2px solid #002B5B;
+    border-left: 2px solid #002B5B;
+}
+
+fieldset {
+    color: white;
+    font-family: "Segoe UI","Arial","Times New Roman";
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.defaultHeader {
+    text-align: center;
+    font-family: Courier New, Courier, monospace;
+    font-size: 50px;
+    color: white;
+}
+
+
+
+
+
+
+
+/* =======================================================  LOGIN PAGE =================================================================*/
+
+.loginDiv {
+    margin: 0px auto;
+    width: 50%;
+    background-color: #2B4865;
+    border: 2px solid #002B5B;
+    border-radius: 2px;
+}
