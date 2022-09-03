@@ -1,5 +1,7 @@
 ﻿@using ProjetoWeb.Classes;
-@{ 
+@{BancoDeDados.DBConnect();}
+@{
+    HttpCookie sessionId = new HttpCookie("userId");
     int validateCS = ValidateLogin();
 }
 
@@ -14,10 +16,12 @@
 <body>
     <h1 id="authResult" onclick="teste()">Place Holder</h1>
     <script>
-            var validate;
-            validate = @validateCS;
+        let validate;
+        let userId = @sessionId.Values["userId"];
+        validate = @validateCS;
             if (validate == 1) {
                 document.getElementById("authResult").innerHTML = "Você se Logou com sucesso!";
+                document.write("<input type='submit' name='uid' id='uid' value='@sessionId.Values["userId"]'/>");
             }
             else {
                 document.getElementById("authResult").innerHTML = "Erro ao efetuar Login";
@@ -28,9 +32,12 @@
 
 @{int ValidateLogin()
     {
-        string motive;
-        if (BancoDeDados.Login(Request.Form["userLogin"], Request.Form["senhaLogin"], out motive) == true)
+        string temp;
+        if (BancoDeDados.Login(Request.Form["userLogin"], Request.Form["senhaLogin"], out temp) == true)
         {
+            sessionId.Values.Add("userId", temp);
+            sessionId.Expires = DateTime.Now.AddHours(12);
+            Response.Cookies.Add(sessionId);
             return 1;
         }
         else

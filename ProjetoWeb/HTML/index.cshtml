@@ -1,23 +1,73 @@
 ﻿@using ProjetoWeb.Classes
-
+@{BancoDeDados.DBConnect();}
 @{
+    HttpCookie id = new HttpCookie("wtver");
     Layout = null;
 }
 
 <!DOCTYPE html>
-<html>
+<html class="indexDefaults">
 <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="~/CSS/style.css">
-
-
     <title>Frase</title>
-    <title></title>
 </head>
-<body>
-    <div class="loginDiv" ;>
+<body class="indexDefaults" style="background-color: black; color: white">
+    <script>
+    @{
+        id = Request.Cookies["userId"];
+    }
+    </script>
+
+        @if (id != null)
+        {
+        <text>
+    <div class="indexContainer">
+         <div class="col1">
+            opções       
+         </div>
+
+         <div class="col2">
+             <br />
+             <form method="post" id="messageForm" onsubmit="">
+                 <h3 style="padding-left: 3%">Poste uma mensagem</h3>
+                 <textarea class="messageOpts" name="mensagem" id="mensagem" placeholder="digite uma mensagem" rows="4" cols="50" required minlength="1" maxlength="140"></textarea>
+                 <input style="padding-left:97%" type="submit" name="enter" value="Enviar" />
+             </form>
+         </div>
+
+         <div class="col3">
+            Quem seguir
+         </div>
     </div>
+            
+        </text>
+        }
+        else
+        {
+        <text>
+            <h1>Tem que logar D :<</h1>
+        </text>
+        }
 </body>
 </html>
+
+<script>
+    function Postar() {
+        @{if (Request.Form["mensagem"] == null || Request.Form["mensagem"] == "")
+            {
+          <Text>
+            return;
+          </text>
+
+                }
+                else
+                {
+
+                    BancoDeDados.Postar(Request.Form["mensagem"], id.Values["userId"].ToString());
+                }
+            }
+</script>
+
 

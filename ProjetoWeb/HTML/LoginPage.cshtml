@@ -1,6 +1,7 @@
 ﻿@using ProjetoWeb.Classes
 @{BancoDeDados.DBConnect();}
-@{ 
+@{
+    HttpCookie id = new HttpCookie("wtver");
     int personExistsCS = 0;
 }
 
@@ -12,7 +13,7 @@
     <link rel="stylesheet" href="~/CSS/style.css">
     <title>Frase - entrar</title>
 </head>
-<body style="padding-top: 50px" onload="SendAlert()">
+<body style="padding-top: 50px; background-color: #8FE3CF" onload="ValidateRegister()">
     <div class="backgroundBlank">
         <br>
         <br>
@@ -22,10 +23,10 @@
         <br>
         <br>
         <div class="loginDiv">
-            <form id="loginForm" autocomplete="off" method="post" onsubmit="NewLogin()" action="~/HTML/LoginAuth.cshtml">
+            <form id="loginForm" autocomplete="off" method="post" action="~/HTML/LoginAuth.cshtml">
                 <fieldset>
                     <legend>Login</legend>
-                    <label>Usuario:<br> </label><input class="inputField" name="userLogin" type="text" required maxlength="20" autocomplete="off">
+                    <label>Usuario:<br> </label><input class="inputField" name="userLogin" type="text" required maxlength="15" autocomplete="off">
                     <br>
                     <br>
                     <label>Senha:<br> </label><input class="inputField" name="senhaLogin" type="password" required minlength="6" maxlength="30" autocomplete="off">
@@ -40,10 +41,10 @@
         <br>
         <br>
         <div class="loginDiv">
-            <form id="registroForm" autocomplete="off" method="post" onsubmit="ValidateRegister()">
+            <form id="registroForm" name="registroForm" autocomplete="off" method="post">
                 <fieldset>
                     <legend>Cadastro</legend>
-                    <label>Usuario:<br> </label><input class="inputField" name="userCad" id="userCad" type="text" required minlength="6" maxlength="20" autocomplete="off">
+                    <label>Usuario:<br> </label><input class="inputField" name="userCad" id="userCad" type="text" required minlength="6" maxlength="15" autocomplete="off">
                     <br>
                     <br>
                     <label>Senha:<br> </label><input class="inputField" name="senhaCad" id="senhaCad" type="password" required minlength="6" maxlength="30" autocomplete="off">
@@ -57,44 +58,56 @@
             </form>
         </div>
     </div>
-    <script>
-        function ValidateRegister() {
-            let personExists;
-            if (document.getElementById("senhaCad").value == document.getElementById("senhaCad2").value) {
-                 @{
-                     if (BancoDeDados.UserExists(Request.Form["userCad"]) == false)
-                     {
-                         personExistsCS = 0;
-                         BancoDeDados.Cadastro(Request.Form["userCad"], Request.Form["senhaCad"]);
-                     }
-                     else
-                     {
-                         personExistsCS = 1;
-                     }
-                  }
-                personExists = @personExistsCS
-            } else {
-                personExists = 2;
-            }
-            window.localStorage.setItem("nextAlert", personExists);
-        }
-
-        function SendAlert() {
-            let personExistsNew = window.localStorage.getItem("nextAlert");
-            if (personExistsNew != null && personExistsNew != undefined) {
-                if (personExistsNew == 0) {
-                    alert("Cadastrado com sucesso!");
-                } else if (personExistsNew == 1) {
-                    alert("Já há alguém usando este nome de usuario")
-                } else {
-                    alert("Erro ao inserir informações")
-                }
-            }
-            window.localStorage.removeItem("nextAlert");
-        }
-    </script>
 </body>
 </html>
+
+<script>
+    function ValidateRegister() {
+
+        @if (Request.Form["userCad"] == null)
+        {
+            <text>
+                return
+            </text>
+        }
+        let personExists;
+                @if (Request.Form["senhaCad"] == Request.Form["senhaCad2"])
+                {
+
+                    if (BancoDeDados.UserExists(Request.Form["userCad"]) == false)
+                    {
+                        personExistsCS = 0;
+                        BancoDeDados.Cadastro(Request.Form["userCad"], Request.Form["senhaCad"]);
+                    }
+                    else
+                    {
+                        personExistsCS = 1;
+                    }
+                }
+                else
+                {
+                    personExistsCS = 2;
+                }
+            personExists = @personExistsCS;
+        if (personExists != null && personExists != undefined) {
+            if (personExists == 0) {
+                alert("Cadastrado com sucesso!");
+            } else if (personExists == 1) {
+                alert("Já há alguém usando este nome de usuario")
+            } else {
+                alert("Erro ao inserir informações")
+            }
+        }
+        var regForm = document.getElementsByName('registroForm')[0];
+        regForm.target.reset();
+    }
+    @{
+        if (id != null)
+        {
+            Response.Cookies["userId"].Expires = DateTime.Now.AddDays(-1);
+        }
+    }
+</script>
 
 
 

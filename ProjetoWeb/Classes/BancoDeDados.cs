@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace ProjetoWeb.Classes
 {
@@ -613,12 +614,12 @@ namespace ProjetoWeb.Classes
             CloseConnection();
         }
 
-        public static bool Login(string login, string senha, out string reason)
+        public static bool Login(string login, string senha, out string userId)
         {
             int id;
             if (login == null || senha == null)
             {
-                reason = "Null";
+                userId = "";
                 return false;
             }
             string query = $"SELECT id FROM Usuario WHERE login = '{login}' AND senha = '{senha}'";
@@ -630,18 +631,18 @@ namespace ProjetoWeb.Classes
                 if (cmd.ExecuteScalar() != null)
                 {
                     id = int.Parse(cmd.ExecuteScalar().ToString());
+                    userId = cmd.ExecuteScalar().ToString();
                     CloseConnection();
-                    reason = "success";
                     return true;
                 }
                 CloseConnection();
-                reason = "Dont Exist";
+                userId = "";
                 return false;
             }
-            reason = "BD error";
+            userId = "";
             return false;
         }
-        
+
         public static bool UserExists(string login)
         {
             string query = $"SELECT id FROM Usuario where login = '{login}'";
@@ -658,6 +659,20 @@ namespace ProjetoWeb.Classes
                 return true;
             }
             return true;
+        }
+
+        public static void Postar(string mensagem, string uid)
+        {
+            string query = $"INSERT INTO Mensagem(conteudo, momento, id_usuario) VALUES('{mensagem}', CURRENT_TIMESTAMP, '{uid}')";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.ExecuteNonQuery();
+
+                CloseConnection();
+            }
         }
     }
 }
