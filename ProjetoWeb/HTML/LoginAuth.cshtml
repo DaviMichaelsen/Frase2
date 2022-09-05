@@ -21,11 +21,15 @@
         validate = @validateCS;
             if (validate == 1) {
                 document.getElementById("authResult").innerHTML = "Você se Logou com sucesso!";
-                document.write("<input type='submit' name='uid' id='uid' value='@sessionId.Values["userId"]'/>");
+                document.write("<button type='button' onclick='BackToIndex()' name='uid' id='uid' value='@sessionId.Values["userId"]'/>");
             }
             else {
                 document.getElementById("authResult").innerHTML = "Erro ao efetuar Login";
-            }
+        }
+
+        function BackToIndex() {
+            document.location.replace("index.cshtml")
+        }
     </script>
 </body>
 </html>

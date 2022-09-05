@@ -25,7 +25,7 @@ namespace ProjetoWeb.Classes
         private static void Initialize()
         {
             //server = "localhost";
-            server = "10.200.119.241";
+            server = "192.168.1.101";
             //database = "connectcsharptomysql";
             database = "Frase";
             //uid = "username";

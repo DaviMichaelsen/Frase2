@@ -25,7 +25,10 @@
         <text>
     <div class="indexContainer">
          <div class="col1">
-            opções       
+             <br />
+             <div class="GotoLoginPage">
+                 <button class="OptsButton" type="submit" onclick='window.location.replace("LoginPage.cshtml")'>Entrar/Cadastrar</button>    
+             </div>
          </div>
 
          <div class="col2">
@@ -33,7 +36,7 @@
              <form method="post" id="messageForm" onsubmit="">
                  <h3 style="padding-left: 3%">Poste uma mensagem</h3>
                  <textarea class="messageOpts" name="mensagem" id="mensagem" placeholder="digite uma mensagem" rows="4" cols="50" required minlength="1" maxlength="140"></textarea>
-                 <input style="padding-left:97%" type="submit" name="enter" value="Enviar" />
+                 <input style="float:right; margin-right: 3%" type="submit" name="enter" value="Enviar" />
              </form>
          </div>
 
