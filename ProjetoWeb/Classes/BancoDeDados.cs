@@ -620,7 +620,7 @@ namespace ProjetoWeb.Classes
             int id;
             if (login == null || senha == null)
             {
-                userId = "";
+                userId = "-1";
                 return false;
             }
             string query = $"SELECT id FROM Usuario WHERE login = '{login}' AND senha = '{senha}'";
@@ -637,10 +637,10 @@ namespace ProjetoWeb.Classes
                     return true;
                 }
                 CloseConnection();
-                userId = "";
+                userId = "-1";
                 return false;
             }
-            userId = "";
+            userId = "-1";
             return false;
         }
 

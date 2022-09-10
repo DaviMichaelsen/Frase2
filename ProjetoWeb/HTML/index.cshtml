@@ -37,8 +37,8 @@
                 <div class="col2">
                     <br />
                     <form method="post" id="messageForm" onsubmit="">
-                        <h3 style="padding-left: 3%">Poste uma mensagem</h3>
-                        <textarea class="messageOpts" name="mensagem" id="mensagem" placeholder="digite uma mensagem" rows="4" cols="50" required minlength="1" maxlength="140"></textarea>
+                        <h3 style="padding-left: 3%; color:black; font-family: 'Century Gothic';">Poste uma mensagem</h3>
+                        <textarea class="messageOpts" name="mensagem" id="mensagem" placeholder="digite aqui..." max-rows="0" rows="5" cols="16" wrap="hard" required minlength="1" maxlength="140"></textarea>
                         <input style="float:right; margin-right: 3%" type="submit" name="enter" value="Enviar" />
                         <br />
                         <br />
@@ -52,6 +52,7 @@
                                     <p class="feedText">@m.conteudo</p>
                                     <p style="text-align:end" class="feedText">@date</p>
                                 </div>
+                                <br/>
                             }
                         }
                     </form>
@@ -116,5 +117,3 @@
                     regForm.target.reset();
         }
 </script>
-
-

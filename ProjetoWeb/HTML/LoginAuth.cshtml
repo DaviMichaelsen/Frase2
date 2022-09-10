@@ -14,21 +14,14 @@
     <title>Autenticando Login</title>
 </head>
 <body>
-    <h1 id="authResult" onclick="teste()">Place Holder</h1>
     <script>
         let validate;
-        let userId = @sessionId.Values["userId"];
         validate = @validateCS;
-            if (validate == 1) {
-                document.getElementById("authResult").innerHTML = "Você se Logou com sucesso!";
-                document.write("<button type='button' onclick='BackToIndex()' name='uid' id='uid' value='@sessionId.Values["userId"]'/>");
+            if (validate == 2) {
+                document.location.replace("index.cshtml")
             }
-            else {
-                document.getElementById("authResult").innerHTML = "Erro ao efetuar Login";
-        }
-
-        function BackToIndex() {
-            document.location.replace("index.cshtml")
+        if (validate == 1) {
+                window.location.replace("LoginPage.cshtml")
         }
     </script>
 </body>
@@ -39,14 +32,18 @@
         string temp;
         if (BancoDeDados.Login(Request.Form["userLogin"], Request.Form["senhaLogin"], out temp) == true)
         {
-            sessionId.Values.Add("userId", temp);
-            sessionId.Expires = DateTime.Now.AddHours(12);
-            Response.Cookies.Add(sessionId);
+            if (temp != "-1")
+            {
+                sessionId.Values.Add("userId", temp);
+                sessionId.Expires = DateTime.Now.AddHours(12);
+                Response.Cookies.Add(sessionId);
+                return 2;
+            }
             return 1;
         }
         else
         {
-            return 0;
+            return 1;
         }
     }
 }
