@@ -2,7 +2,7 @@
 @{BancoDeDados.DBConnect();}
 @{
     HttpCookie id = new HttpCookie("wtver");
-    Layout = null;
+    string cookieValue = "waiting";
 }
 
 <!DOCTYPE html>
@@ -20,39 +20,69 @@
     }
     </script>
 
-        @if (id != null)
-        {
+    @if (id != null)
+    {
+        cookieValue = Context.Request.Cookies["userId"].Value.Split('=')[1];
         <text>
-    <div class="indexContainer">
-         <div class="col1">
-             <br />
-             <div class="GotoLoginPage">
-                 <button class="OptsButton" type="submit" onclick='window.location.replace("LoginPage.cshtml")'>Entrar/Cadastrar</button>    
-             </div>
-         </div>
+            <div class="indexContainer">
+                <div class="col1">
+                    <br />
+                    <div class="GotoLoginPage">
+                        <button class="OptsButton" id="CadLog" type="submit" onclick='window.location.replace("LoginPage.cshtml")'>
+                            <h2 class="twitterText" style="text-align:center">ENTRAR/CADASTRAR</h2>
+                        </button>
+                    </div>
+                </div>
 
-         <div class="col2">
-             <br />
-             <form method="post" id="messageForm" onsubmit="">
-                 <h3 style="padding-left: 3%">Poste uma mensagem</h3>
-                 <textarea class="messageOpts" name="mensagem" id="mensagem" placeholder="digite uma mensagem" rows="4" cols="50" required minlength="1" maxlength="140"></textarea>
-                 <input style="float:right; margin-right: 3%" type="submit" name="enter" value="Enviar" />
-             </form>
-         </div>
+                <div class="col2">
+                    <br />
+                    <form method="post" id="messageForm" onsubmit="">
+                        <h3 style="padding-left: 3%">Poste uma mensagem</h3>
+                        <textarea class="messageOpts" name="mensagem" id="mensagem" placeholder="digite uma mensagem" rows="4" cols="50" required minlength="1" maxlength="140"></textarea>
+                        <input style="float:right; margin-right: 3%" type="submit" name="enter" value="Enviar" />
+                        <br />
+                        <br />
+                        <br />
+                        @{
+                            foreach (Mensagem m in BancoDeDados.Feed(id.Values["userId"]))
+                            {
+                                string date = $"{m.dia}/{m.mes}/{m.ano}";
+                                <div class="feedDiv">
+                                    <p style="font-size: 18px" class="feedText">@m.usuario</p>
+                                    <p class="feedText">@m.conteudo</p>
+                                    <p style="text-align:end" class="feedText">@date</p>
+                                </div>
+                            }
+                        }
+                    </form>
+                </div>
 
-         <div class="col3">
-            Quem seguir
-         </div>
-    </div>
-            
+                <div class="col3">
+                    <br />
+                    <form method="post" onsubmit="Seguir;">
+                        <input style="display:block; margin: 0 auto" type="text" id="Follow" name="Follow" placeholder="Fulano123..." required min="6" />
+
+                        <br />
+
+                        <input style="float:right; margin-right: 31%" type="submit" value="Seguir" />
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
         </text>
-        }
-        else
-        {
+    }
+    else
+    {
         <text>
-            <h1>Tem que logar D :<</h1>
+            <script>
+                window.location.replace("LoginPage.cshtml")
+            </script>
         </text>
-        }
+    }
 </body>
 </html>
 
@@ -64,13 +94,27 @@
             return;
           </text>
 
-                }
-                else
-                {
-
-                    BancoDeDados.Postar(Request.Form["mensagem"], id.Values["userId"].ToString());
-                }
             }
+            else
+            {
+
+                BancoDeDados.Postar(Request.Form["mensagem"], id.Values["userId"].ToString());
+            }
+            }
+
+        function Seguir() {
+                @{
+                        if (!string.IsNullOrEmpty(Request.Form["Follow"]))
+                        {
+                            if (Request.Form["Follow"] != "")
+                            {
+                                BancoDeDados.Seguir(cookieValue, BancoDeDados.UsuarioId(Request.Form["Follow"]));
+                            }
+                        }
+                    }
+                    var regForm = document.getElementsByName('Follow')[0];
+                    regForm.target.reset();
+        }
 </script>
 
 

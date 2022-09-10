@@ -25,7 +25,8 @@ namespace ProjetoWeb.Classes
         private static void Initialize()
         {
             //server = "localhost";
-            server = "192.168.1.101";
+            //Servers: CASA: "192.168.1.101"            SENAI: "10.200.119.241"
+            server = "10.200.119.241";
             //database = "connectcsharptomysql";
             database = "Frase";
             //uid = "username";
@@ -673,6 +674,103 @@ namespace ProjetoWeb.Classes
 
                 CloseConnection();
             }
+        }
+
+        public static bool JaSegue(string seguidor, string seguido)
+        {
+            string query = $"SELECT id FROM Seguidores where seguiu = '{seguidor}' and seguido = '{seguido}'";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                bool check = cmd.ExecuteScalar() == null ? true : false;
+
+                if(check == true)
+                {
+                    CloseConnection();
+                    return false;
+                }
+                else
+                {
+                    CloseConnection();
+                    return true;
+                }
+            }
+            return true;
+        }
+
+        public static string UsuarioId(string usuario)
+        {
+            string query = $"SELECT id FROM Usuario where login = '{usuario}'";
+            string result = "-1";
+
+            if (OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                if (cmd.ExecuteScalar() != null)
+                {
+                    result = cmd.ExecuteScalar().ToString();
+                    CloseConnection();
+                    return result;
+                }
+                else
+                {
+                    CloseConnection();
+                    return "-1";
+                }
+            }
+            return "-1";
+        }
+
+        public static void Seguir(string myId, string targetId)
+        {
+            if (targetId == "-1" || JaSegue(myId, targetId) == true)
+                {
+                    return;
+                }
+            string query = $"INSERT INTO Seguidores(seguiu, seguido) VALUES('{myId}', '{targetId}')";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.ExecuteNonQuery();
+
+                CloseConnection();
+            }
+        }
+
+        public static List<Mensagem> Feed(string myId)
+        {
+            string query = $"SELECT Usuario.usuario, Mensagem.conteudo, Mensagem.momento FROM Mensagem INNER JOIN Usuario on Mensagem.id_usuario = Usuario.id INNER JOIN Seguidores ON Usuario.id = Seguidores.seguido WHERE Seguidores.seguiu = '{myId}' ORDER by Mensagem.momento DESC";
+
+            List<Mensagem> mensagens = new List<Mensagem>();
+
+            if (OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Mensagem newMessage = new Mensagem();
+                    newMessage.usuario = reader["usuario"].ToString();
+                    newMessage.conteudo = reader["conteudo"].ToString();
+                    string[] splitSpace = reader["momento"].ToString().Split(' ');
+                    string[] justDate = splitSpace[0].Split('/');
+                    newMessage.ano = justDate[0];
+                    newMessage.mes = justDate[1];
+                    newMessage.dia = justDate[2];
+                    mensagens.Add(newMessage);
+                }
+                reader.Close();
+                CloseConnection();
+                return mensagens;
+            }
+            return null;
         }
     }
 }
