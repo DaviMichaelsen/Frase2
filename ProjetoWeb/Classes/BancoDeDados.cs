@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Threading.Tasks;
 
 namespace ProjetoWeb.Classes
 {
@@ -744,7 +745,7 @@ namespace ProjetoWeb.Classes
 
         public static List<Mensagem> Feed(string myId)
         {
-            string query = $"SELECT Usuario.usuario, Mensagem.conteudo, Mensagem.momento FROM Mensagem INNER JOIN Usuario on Mensagem.id_usuario = Usuario.id INNER JOIN Seguidores ON Usuario.id = Seguidores.seguido WHERE Seguidores.seguiu = '{myId}' ORDER by Mensagem.momento DESC";
+            string query = $"SELECT Mensagem.id, Usuario.usuario, Mensagem.conteudo, Mensagem.momento FROM Mensagem INNER JOIN Usuario on Mensagem.id_usuario = Usuario.id INNER JOIN Seguidores ON Usuario.id = Seguidores.seguido WHERE Seguidores.seguiu = '{myId}' ORDER by Mensagem.momento DESC";
 
             List<Mensagem> mensagens = new List<Mensagem>();
 
@@ -757,6 +758,7 @@ namespace ProjetoWeb.Classes
                 while (reader.Read())
                 {
                     Mensagem newMessage = new Mensagem();
+                    newMessage.messageId = reader["id"].ToString();
                     newMessage.usuario = reader["usuario"].ToString();
                     newMessage.conteudo = reader["conteudo"].ToString();
                     string[] splitSpace = reader["momento"].ToString().Split(' ');
@@ -771,6 +773,68 @@ namespace ProjetoWeb.Classes
                 return mensagens;
             }
             return null;
+        }
+
+        public static bool IsMod(string id)
+        {
+            string query = $"SELECT adm FROM Usuario WHERE id = {id} and adm = 1";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+
+                if (cmd.ExecuteScalar() != null)
+                {
+                    CloseConnection();
+                    return true;
+                }
+                CloseConnection();
+                return false;
+            }
+            return false;
+        }
+
+        public static void DeleteMessage(string messageId)
+        {
+            if (messageId == null)
+            {
+                return;
+            }
+
+            if (!MessageExists(messageId))
+            {
+                return;
+            }
+
+            string query = $"DELETE FROM Mensagem WHERE Mensagem.id = {messageId}";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.ExecuteNonQuery();
+
+                CloseConnection();
+                return;
+            }
+            return;
+        }
+        public static bool MessageExists(string id)
+        {
+            string query = $"select id FROM Mensagem where id = {id}";
+            if (OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                if(cmd.ExecuteScalar() != null)
+                {
+                    CloseConnection();
+                    return true;
+                }
+                return false;
+            }
+            return false;
         }
     }
 }

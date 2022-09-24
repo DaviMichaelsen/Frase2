@@ -7,6 +7,7 @@ namespace ProjetoWeb.Classes
 {
     public class Mensagem
     {
+        public string messageId;
         public string usuario;
         public string conteudo;
         public string dia;

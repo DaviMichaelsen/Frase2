@@ -1,7 +1,9 @@
 ﻿@using ProjetoWeb.Classes
 @{BancoDeDados.DBConnect();}
 @{
+    int isPageLoaded = 1;
     HttpCookie id = new HttpCookie("wtver");
+    HttpCookie isMod = new HttpCookie("mod");
     string cookieValue = "waiting";
 }
 
@@ -12,16 +14,20 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="~/CSS/style.css">
     <title>Frase</title>
+    <script src="~/JS/DeferJs.js"></script>
 </head>
 <body class="indexDefaults" style="background-color: black; color: white">
     <script>
     @{
         id = Request.Cookies["userId"];
+        isMod = Request.Cookies["isMod"];
+
     }
     </script>
 
     @if (id != null)
     {
+
         cookieValue = Context.Request.Cookies["userId"].Value.Split('=')[1];
         <text>
             <div class="indexContainer">
@@ -36,26 +42,36 @@
 
                 <div class="col2">
                     <br />
-                    <form method="post" id="messageForm" onsubmit="">
+                    <form method="post" id="messageForm">
                         <h3 style="padding-left: 3%; color:black; font-family: 'Century Gothic';">Poste uma mensagem</h3>
                         <textarea class="messageOpts" name="mensagem" id="mensagem" placeholder="digite aqui..." max-rows="0" rows="5" cols="16" wrap="hard" required minlength="1" maxlength="140"></textarea>
                         <input style="float:right; margin-right: 3%" type="submit" name="enter" value="Enviar" />
-                        <br />
-                        <br />
-                        <br />
-                        @{
-                            foreach (Mensagem m in BancoDeDados.Feed(id.Values["userId"]))
-                            {
-                                string date = $"{m.dia}/{m.mes}/{m.ano}";
-                                <div class="feedDiv">
-                                    <p style="font-size: 18px" class="feedText">@m.usuario</p>
-                                    <p class="feedText">@m.conteudo</p>
-                                    <p style="text-align:end" class="feedText">@date</p>
-                                </div>
-                                <br/>
-                            }
-                        }
                     </form>
+                    <br />
+                    <br />
+                    <br />
+                    @{
+                        foreach (Mensagem m in BancoDeDados.Feed(id.Values["userId"]))
+                        {
+                            string date = $"{m.dia}/{m.mes}/{m.ano}";
+                            <div class="feedDiv">
+                                <p style="font-size: 18px" class="feedText">
+                                    @m.usuario
+                                    @if (isMod != null)
+                                    {
+
+                                        @Html.Raw($"<button style='float:right; background-color:red' onclick='ChangeMessageFormValue({m.messageId})'>X</button>");
+                                    }
+                                </p>
+                                <p class="feedText">@m.conteudo</p>
+                                <p style="text-align:end" class="feedText">@date</p>
+                            </div>
+                            <br />
+                        }
+                        <form method="post" id="MessageForm" onsubmit="DeleteMessage()">
+                            <input type="hidden" name="MessageToDelete" id="MessageToDelete" value="">
+                        </form>
+                    }
                 </div>
 
                 <div class="col3">
@@ -72,18 +88,16 @@
                 </div>
 
             </div>
-
-
         </text>
-    }
-    else
-    {
+     }
+        else
+                        {
         <text>
-            <script>
-                window.location.replace("LoginPage.cshtml")
-            </script>
+        <script>
+        window.location.replace("LoginPage.cshtml")
+        </script>
         </text>
-    }
+                        }
 </body>
 </html>
 
@@ -92,7 +106,7 @@
         @{if (Request.Form["mensagem"] == null || Request.Form["mensagem"] == "")
             {
           <Text>
-            return;
+        return;
           </text>
 
             }
@@ -105,15 +119,22 @@
 
         function Seguir() {
                 @{
-                        if (!string.IsNullOrEmpty(Request.Form["Follow"]))
+                    if (!string.IsNullOrEmpty(Request.Form["Follow"]))
+                    {
+                        if (Request.Form["Follow"] != "")
                         {
-                            if (Request.Form["Follow"] != "")
-                            {
-                                BancoDeDados.Seguir(cookieValue, BancoDeDados.UsuarioId(Request.Form["Follow"]));
-                            }
+                            BancoDeDados.Seguir(cookieValue, BancoDeDados.UsuarioId(Request.Form["Follow"]));
                         }
                     }
-                    var regForm = document.getElementsByName('Follow')[0];
-                    regForm.target.reset();
+                    }
+            var regForm = document.getElementsByName('Follow')[0];
+            regForm.target.reset();
         }
+
+        function DeleteMessage() {
+            if (document.getElementById("MessageToDelete").value != null && document.getElementById("MessageToDelete").value != "") {
+                @{string idCs = Request.Form["MessageToDelete"];
+                    BancoDeDados.DeleteMessage(idCs);
+            }
+            }
 </script>
