@@ -1,0 +1,55 @@
+﻿@using ProjetoWeb.Classes
+@{BancoDeDados.DBConnect();}
+@{
+    Layout = null;
+    HttpCookie idCook = new HttpCookie("mmm");
+}
+
+<html>
+<head>
+    <title>Perfil</title>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="~/CSS/style.css">
+</head>
+<body style="background-color: floralwhite">
+
+    <script>
+    @{
+        idCook = Request.Cookies["userId"];
+
+    }
+    </script>
+    @if (idCook != null)
+    {
+    <script>
+        @{
+            string id = Request.Form["ProfileToGo"];
+            Profile profile = BancoDeDados.GetProfile(id);
+            if (profile == null)
+            {
+                Response.Redirect("index.cshtml");
+            }
+        }
+    </script>
+    <div class="ProfileHeader">
+        <img class="ProfilePic" src="@profile.imageUrl" alt="ProfilePic" />
+
+    </div>
+    <br>
+    <div class="ProfileInfos">
+        <br>
+        <h4 style="padding-left:3%; font-family: 'Century Gothic';">@profile.name</h4>
+        <p style="padding-left:5%; font-family: 'Century Gothic';">@profile.description</p>
+        <form method="post">
+            <input type="hidden" name="profUserId" value="" />
+        </form>
+    </div>
+
+
+            }
+            else
+            {
+                Response.Redirect("LoginPage.cshtml");
+            }
+</html>

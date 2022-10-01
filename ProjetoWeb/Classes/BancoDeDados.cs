@@ -27,7 +27,7 @@ namespace ProjetoWeb.Classes
         {
             //server = "localhost";
             //Servers: CASA: "192.168.1.101"            SENAI: "10.200.119.241"
-            server = "10.200.119.241";
+            server = "10.200.116.71";
             //database = "connectcsharptomysql";
             database = "Frase";
             //uid = "username";
@@ -745,7 +745,7 @@ namespace ProjetoWeb.Classes
 
         public static List<Mensagem> Feed(string myId)
         {
-            string query = $"SELECT Mensagem.id, Usuario.usuario, Mensagem.conteudo, Mensagem.momento FROM Mensagem INNER JOIN Usuario on Mensagem.id_usuario = Usuario.id INNER JOIN Seguidores ON Usuario.id = Seguidores.seguido WHERE Seguidores.seguiu = '{myId}' ORDER by Mensagem.momento DESC";
+            string query = $"SELECT Mensagem.id, Usuario.id as userId, Usuario.usuario, Mensagem.conteudo, Mensagem.momento FROM Mensagem INNER JOIN Usuario on Mensagem.id_usuario = Usuario.id INNER JOIN Seguidores ON Usuario.id = Seguidores.seguido WHERE Seguidores.seguiu = '{myId}' ORDER by Mensagem.momento DESC";
 
             List<Mensagem> mensagens = new List<Mensagem>();
 
@@ -758,6 +758,7 @@ namespace ProjetoWeb.Classes
                 while (reader.Read())
                 {
                     Mensagem newMessage = new Mensagem();
+                    newMessage.userId = reader["userId"].ToString();
                     newMessage.messageId = reader["id"].ToString();
                     newMessage.usuario = reader["usuario"].ToString();
                     newMessage.conteudo = reader["conteudo"].ToString();
@@ -835,6 +836,31 @@ namespace ProjetoWeb.Classes
                 return false;
             }
             return false;
+        }
+
+        public static Profile GetProfile(string id)
+        {
+            if(id == null || id == "")
+            {
+                return null;
+            }
+            string query = $"SELECT Usuario.id, Usuario.usuario, Perfil.pfp, Perfil.description FROM Perfil INNER JOIN Usuario on Perfil.user_id = Usuario.id WHERE Usuario.id = {id}";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                MySqlDataReader data = cmd.ExecuteReader();
+
+                if (data.Read())
+                {
+                    Profile profile = new Profile(data["usuario"].ToString(), data["id"].ToString(), data["pfp"].ToString(), data["description"].ToString());
+                    CloseConnection();
+                    return profile;
+                }
+                return null;
+            }
+            return null;
         }
     }
 }

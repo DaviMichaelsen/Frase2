@@ -24,25 +24,26 @@
 
     }
     </script>
-
     @if (id != null)
     {
-
         cookieValue = Context.Request.Cookies["userId"].Value.Split('=')[1];
         <text>
             <div class="indexContainer">
                 <div class="col1">
-                    <br />
                     <div class="GotoLoginPage">
                         <button class="OptsButton" id="CadLog" type="submit" onclick='window.location.replace("LoginPage.cshtml")'>
                             <h2 class="twitterText" style="text-align:center">ENTRAR/CADASTRAR</h2>
+                        </button>
+                        <br/>
+                        <button class="OptsButton" id="CadLog" type="submit" onclick='OpenUserProfile(@cookieValue)'>
+                            <h2 class="twitterText" style="text-align:center">MEU PERFIL</h2>
                         </button>
                     </div>
                 </div>
 
                 <div class="col2">
                     <br />
-                    <form method="post" id="messageForm">
+                    <form method="post" id="messageForm" action="~/HTML/PostaMensagem.cshtml">
                         <h3 style="padding-left: 3%; color:black; font-family: 'Century Gothic';">Poste uma mensagem</h3>
                         <textarea class="messageOpts" name="mensagem" id="mensagem" placeholder="digite aqui..." max-rows="0" rows="5" cols="16" wrap="hard" required minlength="1" maxlength="140"></textarea>
                         <input style="float:right; margin-right: 3%" type="submit" name="enter" value="Enviar" />
@@ -55,14 +56,14 @@
                         {
                             string date = $"{m.dia}/{m.mes}/{m.ano}";
                             <div class="feedDiv">
-                                <p style="font-size: 18px" class="feedText">
+                                <a onclick="OpenUserProfile(@m.userId)" style="font-size: 18px" class="feedText">
                                     @m.usuario
-                                    @if (isMod != null)
-                                    {
+                                </a>
+                                @if (isMod != null)
+                                {
 
-                                        @Html.Raw($"<button style='float:right; background-color:red' onclick='ChangeMessageFormValue({m.messageId})'>X</button>");
-                                    }
-                                </p>
+                                    @Html.Raw($"<button style='float:right; background-color:red' onclick='ChangeMessageFormValue({m.messageId})'>X</button>");
+                                }
                                 <p class="feedText">@m.conteudo</p>
                                 <p style="text-align:end" class="feedText">@date</p>
                             </div>
@@ -70,6 +71,9 @@
                         }
                         <form method="post" id="MessageForm" onsubmit="DeleteMessage()">
                             <input type="hidden" name="MessageToDelete" id="MessageToDelete" value="">
+                        </form>
+                        <form action="~/HTML/Profiles.cshtml" method="post" id="UserProfile" onsubmit="GoToUserProfile()">
+                            <input type="hidden" name="ProfileToGo" id="ProfileToGo" value="">
                         </form>
                     }
                 </div>
@@ -89,8 +93,8 @@
 
             </div>
         </text>
-     }
-        else
+                        }
+                        else
                         {
         <text>
         <script>
@@ -102,20 +106,6 @@
 </html>
 
 <script>
-    function Postar() {
-        @{if (Request.Form["mensagem"] == null || Request.Form["mensagem"] == "")
-            {
-          <Text>
-        return;
-          </text>
-
-            }
-            else
-            {
-
-                BancoDeDados.Postar(Request.Form["mensagem"], id.Values["userId"].ToString());
-            }
-            }
 
         function Seguir() {
                 @{

@@ -1,0 +1,40 @@
+﻿@using ProjetoWeb.Classes;
+@{BancoDeDados.DBConnect();}
+@{
+    Layout = null;
+    HttpCookie idCook = new HttpCookie("mmm");
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="~/CSS/style.css">
+    <title>Enviando Mensagem</title>
+</head>
+<body>
+    <script>
+        @{
+            idCook = Request.Cookies["userId"];
+        }
+        @if (idCook != null)
+        {
+            if (!string.IsNullOrEmpty(Request.Form["mensagem"]))
+            {
+                BancoDeDados.Postar(Request.Form["mensagem"], idCook.Values["userId"].ToString());
+                Response.Redirect("index.cshtml");
+            }
+            else
+            {
+                Response.Redirect("index.cshtml");
+            }
+        }
+        else
+        {
+            Response.Redirect("LoginPage.cshtml");
+        }
+    </script>
+</body>
+</html>
+
+

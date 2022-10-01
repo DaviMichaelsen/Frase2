@@ -153,6 +153,9 @@
   <ItemGroup>
     <Content Include="CSS\style.css" />
     <Content Include="JS\DeferJs.js" />
+    <Content Include="HTML\Profiles.cshtml" />
+    <Content Include="HTML\PostaMensagem.cshtml" />
+    <Content Include="HTML\EditarPerfil.cshtml" />
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.0.js" />
     <Content Include="Scripts\jquery-3.6.0.min.js" />
@@ -165,6 +168,7 @@
   <ItemGroup>
     <Compile Include="Classes\BancoDeDados.cs" />
     <Compile Include="Classes\Mensagem.cs" />
+    <Compile Include="Classes\Profile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

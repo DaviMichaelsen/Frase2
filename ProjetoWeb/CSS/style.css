@@ -140,3 +140,46 @@ fieldset {
     color: black;
 }
 
+/*========================================================  PROFILE PAGE =====================================================================*/
+
+.ProfileHeader {
+    display: flex;
+    margin: 0 auto;
+    width: 50%;
+    height: 45vh;
+    background-color: lightgray;
+    padding-bottom: 10px;
+    box-shadow: 0px 0px 2px 2px rgb(0,0,0);
+}
+
+.ProfilePic {
+    display: block;
+    align-self: flex-end;
+    width: 300px;
+    height: 300px;
+    border: 3px solid black;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: 0 auto;
+}
+
+.ProfileInfos {
+    margin: 0 auto;
+    width: 50%;
+    height: 55vh;
+    background-color: whitesmoke;
+    box-shadow: 0px 0px 2px 2px rgb(0,0,0);
+}
+
+/*========================================================  EDIT PAGE =====================================================================*/
+
+.EditFormDiv{
+
+}
+
+
+
+
+
+
+
