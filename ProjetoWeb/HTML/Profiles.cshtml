@@ -3,6 +3,7 @@
 @{
     Layout = null;
     HttpCookie idCook = new HttpCookie("mmm");
+    string cookieValue;
 }
 
 <html>
@@ -17,39 +18,65 @@
     <script>
     @{
         idCook = Request.Cookies["userId"];
-
     }
     </script>
     @if (idCook != null)
     {
-    <script>
+        if (string.IsNullOrEmpty(Request.Form["ProfileToGo"]))
+        {
+            Response.Redirect("index.cshtml");
+        }
+        cookieValue = Context.Request.Cookies["userId"].Value.Split('=')[1];
+        <script>
         @{
             string id = Request.Form["ProfileToGo"];
             Profile profile = BancoDeDados.GetProfile(id);
             if (profile == null)
             {
-                Response.Redirect("index.cshtml");
+                if (id == cookieValue)
+                {
+                    BancoDeDados.CreateProfile(cookieValue);
+                    Response.Redirect("EditarPerfil.cshtml");
+                }
+                else
+                {
+                    Response.Redirect("index.cshtml");
+                }
             }
         }
-    </script>
-    <div class="ProfileHeader">
-        <img class="ProfilePic" src="@profile.imageUrl" alt="ProfilePic" />
+        </script>
+        <div class="ProfileHeader">
+            <img class="ProfilePic" src="@profile.imageUrl" alt="ProfilePic" />
 
-    </div>
-    <br>
-    <div class="ProfileInfos">
+        </div>
+        if (cookieValue == profile.userId)
+        {
+            <br />
+            <div style='width:50%; margin: 0 auto; display: block'>
+                <button style='float:right; background-color:white;' onclick='window.location.replace("EditarPerfil.cshtml")'>Editar</button>
+            </div>
+            <br />
+        }
+
+
         <br>
-        <h4 style="padding-left:3%; font-family: 'Century Gothic';">@profile.name</h4>
-        <p style="padding-left:5%; font-family: 'Century Gothic';">@profile.description</p>
-        <form method="post">
-            <input type="hidden" name="profUserId" value="" />
-        </form>
-    </div>
-
-
+        <div class="ProfileInfos">
+            <br>
+            <h4 style="padding-left:3%; font-family: 'Century Gothic';">@profile.name</h4>
+            <p style="padding-left:5%; font-family: 'Century Gothic';">@profile.description</p>
+            <form method="post">
+                <input type="hidden" name="profUserId" value="" />
+            </form>
+        </div>
+        <script>
+            function IndexRedirect() {
+                window.location.replace("index.cshtml")
             }
-            else
-            {
-                Response.Redirect("LoginPage.cshtml");
-            }
+        </script>
+    }
+    else
+    {
+        Response.Redirect("LoginPage.cshtml");
+    }
+</body>
 </html>

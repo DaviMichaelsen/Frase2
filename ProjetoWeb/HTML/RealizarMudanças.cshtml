@@ -1,0 +1,47 @@
+﻿@using ProjetoWeb.Classes;
+@{BancoDeDados.DBConnect();}
+@{
+    HttpCookie idCook = new HttpCookie("Phoul Da-Çsi");
+    string cookieValue;
+    Layout = null;
+}
+
+<html>
+<head>
+    <title>Realizar Mudanças</title>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="~/CSS/style.css">
+</head>
+<body>
+    <script>
+        @{idCook = Request.Cookies["userId"];}
+    </script>
+    @if (idCook == null)
+    {
+        Response.Redirect("LoginPage.cshtml");
+    }
+    else
+    {
+        cookieValue = Context.Request.Cookies["userId"].Value.Split('=')[1];
+        if (!string.IsNullOrEmpty(Request.Form["newUser"]))
+        {
+            BancoDeDados.UpdateGenerics("Usuario", "usuario", Request.Form["newUser"], cookieValue);
+        }
+
+        if (!string.IsNullOrEmpty(Request.Form["newPic"]))
+        {
+            BancoDeDados.UpdateGenerics("Perfil", "pfp", Request.Form["newPic"], cookieValue);
+        }
+
+        if (!string.IsNullOrEmpty(Request.Form["newDesc"]))
+        {
+            BancoDeDados.UpdateGenerics("Perfil", "description", Request.Form["newDesc"], cookieValue);
+        }
+
+        Response.Redirect("index.cshtml");
+    }
+</body>
+</html>
+
+

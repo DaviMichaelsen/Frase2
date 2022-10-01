@@ -54,6 +54,10 @@ namespace ProjetoWeb.Classes
         //open connection to database
         private static bool OpenConnection()
         {
+            if (conn.State == System.Data.ConnectionState.Open)
+            {
+                return true;
+            }
             try
             {
                 conn.Open();
@@ -833,6 +837,7 @@ namespace ProjetoWeb.Classes
                     CloseConnection();
                     return true;
                 }
+                CloseConnection();
                 return false;
             }
             return false;
@@ -855,12 +860,65 @@ namespace ProjetoWeb.Classes
                 if (data.Read())
                 {
                     Profile profile = new Profile(data["usuario"].ToString(), data["id"].ToString(), data["pfp"].ToString(), data["description"].ToString());
+                    data.Close();
                     CloseConnection();
                     return profile;
                 }
+                data.Close();
                 return null;
             }
             return null;
+        }
+
+        public static void CreateProfile(string id)
+        {
+            if(CheckProfileExists(id) == true)
+            {
+                return;
+            }
+            string query = $"INSERT INTO `Perfil` (`id`, `user_id`, `pfp`, `description`) VALUES (NULL, '{id}', NULL, NULL);";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.ExecuteNonQuery();
+
+                CloseConnection();
+            }
+        }
+
+        public static bool CheckProfileExists(string id)
+        {
+            string query = $"SELECT user_id FROM Perfil where user_id = {id}";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                if(cmd.ExecuteScalar() != null)
+                {
+                    CloseConnection();
+                    return true;
+                }
+                CloseConnection();
+                return false;
+            }
+            return true;
+        }
+
+        public static void UpdateGenerics(string table, string element, string newValue, string userId)
+        {
+            string query = $"UPDATE {table} SET {element} = '{newValue}' WHERE {table}.id = {userId}";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.ExecuteNonQuery();
+
+                CloseConnection();
+            }
         }
     }
 }
