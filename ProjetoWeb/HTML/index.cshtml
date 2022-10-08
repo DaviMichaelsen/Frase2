@@ -3,7 +3,6 @@
 @{
     int isPageLoaded = 1;
     HttpCookie id = new HttpCookie("wtver");
-    HttpCookie isMod = new HttpCookie("mod");
     HttpCookie isDono = new HttpCookie("asusd");
     string cookieValue = "waiting";
 }
@@ -25,7 +24,6 @@
     <script>
     @{
         id = Request.Cookies["userId"];
-        isMod = Request.Cookies["isMod"];
 
     }
     </script>
@@ -67,7 +65,7 @@
                                     <a onclick="OpenUserProfile(@m.userId)" style="font-size: 18px" class="feedText btn btn-light btn-sm">
                                         @m.usuario
                                     </a>
-                                    @if (isMod != null)
+                                    @if (BancoDeDados.IsMod(cookieValue))
                                     {
 
                                         @Html.Raw($"<button class='btn btn-danger btn-outline-light' style='float:right; margin-right:2%;' onclick='ChangeMessageFormValue({m.messageId})'>X</button>");

@@ -37,12 +37,6 @@
             if (temp != "-1")
             {
                 sessionId.Values.Add("userId", temp);
-                if(BancoDeDados.IsMod(temp) == true)
-                {
-                    isMod.Values.Add("isMod", "1");
-                    isMod.Expires = DateTime.Now.AddHours(12);
-                    Response.Cookies.Add(isMod);
-                }
                 sessionId.Expires = DateTime.Now.AddHours(12);
                 Response.Cookies.Add(sessionId);
                 return 2;
