@@ -848,7 +848,7 @@ namespace ProjetoWeb.Classes
             {
                 return null;
             }
-            string query = $"SELECT Usuario.id, Usuario.usuario, Perfil.pfp, Perfil.description FROM Perfil INNER JOIN Usuario on Perfil.user_id = Usuario.id WHERE Usuario.id = {id}";
+            string query = $"SELECT Usuario.id, Usuario.usuario, Usuario.login, Perfil.pfp, Perfil.description FROM Perfil INNER JOIN Usuario on Perfil.user_id = Usuario.id WHERE Usuario.id = {id}";
 
             if(OpenConnection() == true)
             {
@@ -858,7 +858,7 @@ namespace ProjetoWeb.Classes
 
                 if (data.Read())
                 {
-                    Profile profile = new Profile(data["usuario"].ToString(), data["id"].ToString(), data["pfp"].ToString(), data["description"].ToString());
+                    Profile profile = new Profile(data["usuario"].ToString(), data["login"].ToString(), data["id"].ToString(), data["pfp"].ToString(), data["description"].ToString());
                     data.Close();
                     CloseConnection();
                     return profile;
