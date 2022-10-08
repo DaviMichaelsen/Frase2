@@ -26,7 +26,6 @@ namespace ProjetoWeb.Classes
         private static void Initialize()
         {
             //server = "localhost";
-            //Servers: CASA: "192.168.1.101"            SENAI: "10.200.119.241"
             server = "10.200.116.71";
             //database = "connectcsharptomysql";
             database = "Frase";
@@ -907,9 +906,9 @@ namespace ProjetoWeb.Classes
             return true;
         }
 
-        public static void UpdateGenerics(string table, string element, string newValue, string userId)
+        public static void UpdateGenerics(string table, string element, string newValue, string varInDB , string userId)
         {
-            string query = $"UPDATE {table} SET {element} = '{newValue}' WHERE {table}.id = {userId}";
+            string query = $"UPDATE {table} SET {element} = '{newValue}' WHERE {table}.{varInDB} = {userId}";
 
             if(OpenConnection() == true)
             {

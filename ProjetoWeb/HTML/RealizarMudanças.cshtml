@@ -26,17 +26,17 @@
         cookieValue = Context.Request.Cookies["userId"].Value.Split('=')[1];
         if (!string.IsNullOrEmpty(Request.Form["newUser"]))
         {
-            BancoDeDados.UpdateGenerics("Usuario", "usuario", Request.Form["newUser"], cookieValue);
+            BancoDeDados.UpdateGenerics("Usuario", "usuario", Request.Form["newUser"], "id" ,cookieValue);
         }
 
         if (!string.IsNullOrEmpty(Request.Form["newPic"]))
         {
-            BancoDeDados.UpdateGenerics("Perfil", "pfp", Request.Form["newPic"], cookieValue);
+            BancoDeDados.UpdateGenerics("Perfil", "pfp", Request.Form["newPic"], "user_id",cookieValue);
         }
 
         if (!string.IsNullOrEmpty(Request.Form["newDesc"]))
         {
-            BancoDeDados.UpdateGenerics("Perfil", "description", Request.Form["newDesc"], cookieValue);
+            BancoDeDados.UpdateGenerics("Perfil", "description", Request.Form["newDesc"], "user_id", cookieValue);
         }
 
         Response.Redirect("index.cshtml");
