@@ -4,6 +4,7 @@
     int isPageLoaded = 1;
     HttpCookie id = new HttpCookie("wtver");
     HttpCookie isMod = new HttpCookie("mod");
+    HttpCookie isDono = new HttpCookie("asusd");
     string cookieValue = "waiting";
 }
 
@@ -48,7 +49,7 @@
                             </div>
                     </div>
 
-                    <div class="col-6" style="background-color: #D2C9ED">
+                    <div class="col-6" style="background-color: #B8D4DD">
                         <br />
                         <form method="post" id="messageForm" action="~/HTML/PostaMensagem.cshtml">
                             <h3 style="padding-left: 3%; color:black; font-family: 'Century Gothic';">Poste uma mensagem</h3>
@@ -89,12 +90,23 @@
                         <br>
                         <br>
                         <form method="post" onsubmit="Seguir;">
+                            <label class="form-label" style="margin-left: 2%">Seguir usuario</label>
                             <input class="form-control" type="text" id="Follow" name="Follow" placeholder="Fulano123..." required min="6" />
                             <br />
                             <input class="btn btn-primary" type="submit" value="Seguir" />
 
                         </form>
-
+                        <br>
+                        <br>
+                        @if(BancoDeDados.IsDono(cookieValue) == true)
+                        {
+                            <form method="post" action="~/HTML/TornarMod.cshtml">
+                                <label class="form-label" style="margin-left: 2%">Tornar moderador</label>
+                                <input class="form-control" type="text" id="modify" name="modify" placeholder="Ciclano123" required min="6" />
+                                <br />
+                                <input class="btn btn-danger" type="submit" value="Confirmar" />
+                            </form>
+                        }
                     </div>
 
                 </div>

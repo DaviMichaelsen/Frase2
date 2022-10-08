@@ -1,0 +1,39 @@
+﻿@using ProjetoWeb.Classes;
+@{
+    BancoDeDados.DBConnect();
+    Layout = null;
+    HttpCookie userId = new HttpCookie("aaaaaa");
+    HttpCookie isDono = new HttpCookie("aaaaasda");
+    string cookieValue = "waiting";
+}
+
+<html>
+<head>
+    <title>Modificando</title>
+</head>
+<body>
+    <script>
+        @{
+            cookieValue = Context.Request.Cookies["userId"].Value.Split('=')[1];
+            userId = Request.Cookies["userId"];
+            isDono = Request.Cookies["isDono"];
+
+            if(userId == null || !BancoDeDados.IsDono(cookieValue))
+            {
+                Response.Redirect("LoginPage.cshtml");
+                return;
+            }
+            string newMod = Request.Form["modify"];
+            if (string.IsNullOrEmpty(newMod))
+            {
+                Response.Redirect("LoginPage.cshtml");
+                return;
+            }
+            BancoDeDados.NewMod(newMod);
+            Response.Redirect("index.cshtml");
+        }
+    </script>
+</body>
+</html>
+
+

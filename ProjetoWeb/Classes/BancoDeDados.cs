@@ -919,5 +919,45 @@ namespace ProjetoWeb.Classes
                 CloseConnection();
             }
         }
+
+        public static bool IsDono(string id)
+        {
+            string query = $"SELECT dono FROM Usuario where id = {id}";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                if (cmd.ExecuteScalar() != DBNull.Value)
+                {
+                    if (cmd.ExecuteScalar().ToString() != "0")
+                    {
+                        CloseConnection();
+                        return true;
+                    }
+                }
+                CloseConnection();
+                return false;
+            }
+            return false;
+        }
+
+        public static void NewMod(string user)
+        {
+            string idUser = UsuarioId(user);
+            if (IsMod(idUser))
+            {
+                return;
+            }
+            string query = $"UPDATE Usuario SET adm = 1 WHERE Usuario.id = {idUser}";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                cmd.ExecuteNonQuery();
+
+                CloseConnection();
+            }
+        }
     }
 }
