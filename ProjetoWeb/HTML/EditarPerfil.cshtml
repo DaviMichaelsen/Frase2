@@ -23,7 +23,7 @@
             }
         }
     </script>
-    <div class="border-end border-start border-dark shadow" style="margin-top:0; height: 100vh; width: 60%; margin: 0 auto; background-color: #B8D4DD;">
+    <div class="border-end border-start border-dark shadow" style="margin-top:0; min-height: 100vh; height:auto; width: 60%; margin: 0 auto; background-color: #B8D4DD;">
         <br>
         <br>
         <br>
@@ -41,10 +41,9 @@
                         <label class="form-label">Alterar Foto de perfil(link)</label>
                         <input class="form-control" type="text" name="newPic" id="mensagem" placeholder="Cole o link da imagem aqui" maxlength="200">
                         <label class="form-label">Alterar Descrição</label>
-                        <input class="form-control" type="text" name="newDesc" id="mensagem" placeholder="digite aqui..." maxlength="140">
+                        <textarea class="form-control" style="resize: none; overflow:hidden " type="text" name="newDesc" id="mensagem" placeholder="digite aqui..." maxlength="400" cols="40" rows="10" wrap="hard"></textarea>
                         <br>
                         <input class="btn btn-primary" type="submit" name="NovoPerfil" value="Realizar Mudanças" />
-                        <br>
                     </form>
                 </div>
             </div>

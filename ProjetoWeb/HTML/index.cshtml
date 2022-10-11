@@ -38,10 +38,10 @@
                             <br />
                             <br />
                             <div class="btn-group-vertical d-flex align-itens-center" role="group" aria-label="vertical button group">
-                                <button type="button" class="btn btn-dark btn-outline-light btn-lg" id="CadLog" onclick='window.location.replace("LoginPage.cshtml")'>
-                                    ENTRAR/CADASTRAR
+                                <button type="button" class="btn btn-dark btn-outline-light btn-lg" style="font-size: 1.3vw" id="CadLog" onclick='window.location.replace("LoginPage.cshtml")'>
+                                    ENTRAR
                                 </button>
-                                <button type="button" class="btn btn-dark btn-outline-light btn-lg" id="CadLog" onclick='OpenUserProfile(@cookieValue)'>
+                                <button type="button" class="btn btn-dark btn-outline-light btn-lg" style="font-size: 1.3vw" id="CadLog" onclick='OpenUserProfile(@cookieValue)'>
                                     MEU PERFIL
                                 </button>
                             </div>
@@ -65,12 +65,13 @@
                                     <a onclick="OpenUserProfile(@m.userId)" style="font-size: 18px" class="feedText btn btn-light btn-sm">
                                         @m.usuario
                                     </a>
-                                    @if (BancoDeDados.IsMod(cookieValue))
+                                    @if (BancoDeDados.IsMod(cookieValue) || BancoDeDados.IsDono(cookieValue))
                                     {
 
                                         @Html.Raw($"<button class='btn btn-danger btn-outline-light' style='float:right; margin-right:2%;' onclick='ChangeMessageFormValue({m.messageId})'>X</button>");
                                     }
-                                    <p class="feedText">@m.conteudo</p>
+
+                                    <p style="white-space: pre-wrap;" class="feedText">@m.conteudo</p>
                                     <p style="text-align:end" class="feedText">@date</p>
                                 </div>
                                 <br />

@@ -26,7 +26,7 @@ namespace ProjetoWeb.Classes
         private static void Initialize()
         {
             //server = "localhost";
-            server = "10.200.116.71";
+            server = "192.168.1.103";
             //database = "connectcsharptomysql";
             database = "Frase";
             //uid = "username";
@@ -927,9 +927,9 @@ namespace ProjetoWeb.Classes
             if(OpenConnection() == true)
             {
                 MySqlCommand cmd = new MySqlCommand(query, conn);
-                if (cmd.ExecuteScalar() != DBNull.Value)
+                if (cmd.ExecuteScalar() != null)
                 {
-                    if (cmd.ExecuteScalar().ToString() != "0")
+                    if (cmd.ExecuteScalar().ToString() != "False")
                     {
                         CloseConnection();
                         return true;
