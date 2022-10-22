@@ -1,5 +1,8 @@
-﻿@{
+﻿@using ProjetoWeb.Classes;
+@{
+    BancoDeDados.DBConnect();
     HttpCookie id = new HttpCookie("man");
+    string cookieValue = "waiting";
     Layout = null;
 }
 
@@ -17,39 +20,66 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     <script>
         @{id = Request.Cookies["userId"];
+
             if (id == null)
             {
                 Response.Redirect("LoginPage.cshtml");
             }
+            cookieValue = Context.Request.Cookies["userId"].Value.Split('=')[1];
         }
     </script>
-    <div class="border-end border-start border-dark shadow" style="margin-top:0; min-height: 100vh; height:auto; width: 60%; margin: 0 auto; background-color: #B8D4DD;">
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <h2 style="font-family:'Century Gothic'; text-align:center; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
-             1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;"> Altere seu perfil</h2>
-        <div style="padding-top:10vh">
-            <div class="d-flex justify-content-center">
-                <div class="col-8 text-bg-secondary p-3 border border-dark shadow-lg rounded">
-                    <form action="~/HTML/RealizarMudanças.cshtml" method="post">
-                        <label class="form-label">Alterar Nome de Usuario</label>
-                        <input class="form-control" type="text" name="newUser" placeholder="Novo nome" maxlength="20" /><br />
-                        <label class="form-label">Alterar Foto de perfil(link)</label>
-                        <input class="form-control" type="text" name="newPic" id="mensagem" placeholder="Cole o link da imagem aqui" maxlength="200">
-                        <label class="form-label">Alterar Descrição</label>
-                        <textarea class="form-control" style="resize: none; overflow:hidden " type="text" name="newDesc" id="mensagem" placeholder="digite aqui..." maxlength="400" cols="40" rows="10" wrap="hard"></textarea>
-                        <br>
-                        <input class="btn btn-primary" type="submit" name="NovoPerfil" value="Realizar Mudanças" />
-                    </form>
+    <div class="container-fluid">
+        <div style="height:5%; width: 100%; background-color: #7a7a7a; z-index:100; position:fixed" class="border border-2 border-dark shadow-lg row">
+            <div class="col">
+                <a href="~/HTML/index.cshtml"><img class="img-thumbnail" style="max-width: 6%; max-height: 3.62vh; margin-top: 0.5vh; background-color: transparent" src="~/homeIcon.png" alt="home" /></a>
+            </div>
+            <div class="col">
+                <div class="d-flex justify-content-center">
+                    <h1 style="font-family:'Brush Script MT'; font-size: 1.5vw; margin-top: 0.5vh; color: white">FRASE</h1>
+                </div>
+            </div>
+            <div class="col" style="margin-top:0">
+                <div class="d-flex justify-content-end rounded-circle btn">
+                    @if (BancoDeDados.CheckProfileExists(cookieValue) == false)
+                    {
+                        <img onclick="OpenUserProfile(@cookieValue)" class="rounded-circle border border-dark" style="width: 6%; height: 3.62vh" src="~/user.png" alt="Você" />
+                    }
+                    else
+                    {
+                        <img onclick="OpenUserProfile(@cookieValue)" class="rounded-circle border border-dark" style="width: 6%; height: 3.62vh" src="@BancoDeDados.GetProfilePic(cookieValue)" alt="Você" />
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="border-end border-start border-dark shadow" style="margin-top:0; min-height: 100vh; height:auto; width: 60%; margin: 0 auto; background-color: #B8D4DD;">
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <h2 style="font-family:'Century Gothic'; text-align:center; text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
+             1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;">
+                Altere seu perfil
+            </h2>
+            <div style="padding-top:10vh">
+                <div class="d-flex justify-content-center">
+                    <div class="col-8 text-bg-secondary p-3 border border-dark shadow-lg rounded">
+                        <form action="~/HTML/RealizarMudanças.cshtml" method="post">
+                            <label class="form-label">Alterar Nome de Usuario</label>
+                            <input class="form-control" type="text" name="newUser" placeholder="Novo nome" maxlength="20" /><br />
+                            <label class="form-label">Alterar Foto de perfil(link)</label>
+                            <input class="form-control" type="text" name="newPic" id="mensagem" placeholder="Cole o link da imagem aqui" maxlength="200">
+                            <label class="form-label">Alterar Descrição</label>
+                            <textarea class="form-control" style="resize: none; overflow:hidden " type="text" name="newDesc" id="mensagem" placeholder="digite aqui..." maxlength="400" cols="40" rows="10" wrap="hard"></textarea>
+                            <br>
+                            <input class="btn btn-primary" type="submit" name="NovoPerfil" value="Realizar Mudanças" />
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 </body>
 </html>
 

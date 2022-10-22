@@ -26,7 +26,7 @@ namespace ProjetoWeb.Classes
         private static void Initialize()
         {
             //server = "localhost";
-            server = "192.168.1.103";
+            server = "10.200.116.71";
             //database = "connectcsharptomysql";
             database = "Frase";
             //uid = "username";
@@ -929,7 +929,8 @@ namespace ProjetoWeb.Classes
                 MySqlCommand cmd = new MySqlCommand(query, conn);
                 if (cmd.ExecuteScalar() != null)
                 {
-                    if (cmd.ExecuteScalar().ToString() != "False")
+                    string sleep = cmd.ExecuteScalar().ToString();
+                    if (sleep == "True")
                     {
                         CloseConnection();
                         return true;
@@ -958,6 +959,22 @@ namespace ProjetoWeb.Classes
 
                 CloseConnection();
             }
+        }
+
+        public static string GetProfilePic(string id)
+        {
+            string result = "";
+            string query = $"SELECT pfp FROM Perfil where user_id = {id}";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                result = cmd.ExecuteScalar().ToString();
+
+                CloseConnection();
+            }
+            return result;
         }
     }
 }

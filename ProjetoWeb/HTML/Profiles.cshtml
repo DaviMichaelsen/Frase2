@@ -3,7 +3,7 @@
 @{
     Layout = null;
     HttpCookie idCook = new HttpCookie("mmm");
-    string cookieValue;
+    string cookieValue = "waiting";
 }
 
 <html>
@@ -48,10 +48,36 @@
             }
         }
         </script>
+        <div class="container-fluid">
+            <div style="height:5%; width: 100%; background-color: #7a7a7a; z-index:100; position:fixed" class="border border-2 border-dark shadow-lg row">
+                <div class="col">
+                    <a href="~/HTML/index.cshtml"><img class="img-thumbnail" style="max-width: 6%; max-height: 3.62vh; margin-top: 0.5vh; background-color: transparent" src="~/homeIcon.png" alt="home" /></a>
+                </div>
+                <div class="col">
+                    <div class="d-flex justify-content-center">
+                        <h1 style="font-family:'Brush Script MT'; font-size: 1.5vw; margin-top: 0.5vh; color: white">FRASE</h1>
+                    </div>
+                </div>
+                <div class="col" style="margin-top:0">
+                    <div class="d-flex justify-content-end rounded-circle btn">
+                        @if (BancoDeDados.CheckProfileExists(cookieValue) == false)
+                        {
+                            <img onclick="OpenUserProfile(@cookieValue)" class="rounded-circle border border-dark" style="width: 6%; height: 3.62vh" src="~/user.png" alt="Você" />
+                        }
+                        else
+                        {
+                            <img onclick="OpenUserProfile(@cookieValue)" class="rounded-circle border border-dark" style="width: 6%; height: 3.62vh" src="@BancoDeDados.GetProfilePic(cookieValue)" alt="Você" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
         <div class="container">
             <div class="border-start border-end border-dark shadow" style="background-color: #B8D4DD; width: 100%; min-height:100vh; height:auto; padding-bottom:2%; margin:0 auto">
                 <br>
-                    <img class="ProfilePic shadow-lg" src="@profile.imageUrl" alt="ProfilePic" />
+                <img class="ProfilePic shadow-lg" src="@profile.imageUrl" alt="ProfilePic" />
 
                 @if (cookieValue == profile.userId)
                 {
@@ -67,7 +93,7 @@
                 <div class="border border-dark rounded shadow" style="margin:0 auto; min-height: 35vh; height:auto; width:80%; background-color: #EAEAEA">
                     <br>
                     <label class="fs-4 fw-bold" style="padding-left:3%; font-family: 'Century Gothic';">@profile.name</label> <label class="fs-6 fw-lighter text-muted" style="margin-left:1%">|@profile.login|</label>
-                    <p style="padding-left:5%; margin-top:2%; font-family: 'Century Gothic'; white-space:pre-wrap" >@profile.description</p>
+                    <p style="padding-left:5%; margin-top:2%; font-family: 'Century Gothic'; white-space:pre-wrap">@profile.description</p>
                     <form method="post">
                         <input type="hidden" name="profUserId" value="" />
                     </form>

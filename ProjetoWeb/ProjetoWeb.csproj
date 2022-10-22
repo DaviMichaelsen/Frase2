@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CSS\style.css" />
+    <Content Include="homeIcon.png" />
     <Content Include="JS\DeferJs.js" />
     <Content Include="HTML\Profiles.cshtml" />
     <Content Include="HTML\PostaMensagem.cshtml" />
@@ -163,6 +164,7 @@
     <Content Include="Scripts\jquery-3.6.0.min.js" />
     <Content Include="Scripts\jquery-3.6.0.slim.js" />
     <Content Include="Scripts\jquery-3.6.0.slim.min.js" />
+    <Content Include="user.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
