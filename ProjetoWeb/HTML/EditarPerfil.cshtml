@@ -31,22 +31,22 @@
     <div class="container-fluid">
         <div style="height:5%; width: 100%; background-color: #7a7a7a; z-index:100; position:fixed" class="border border-2 border-dark shadow-lg row">
             <div class="col">
-                <a href="~/HTML/index.cshtml"><img class="img-thumbnail" style="max-width: 6%; max-height: 3.62vh; margin-top: 0.5vh; background-color: transparent" src="~/homeIcon.png" alt="home" /></a>
+                <a href="~/HTML/index.cshtml"><img class="img-thumbnail" style="max-width: 7%; max-height: 4.2vh; z-index:98; margin-top:0.2vh" src="~/homeIcon.png" alt="home" /></a>
             </div>
             <div class="col">
                 <div class="d-flex justify-content-center">
-                    <h1 style="font-family:'Brush Script MT'; font-size: 1.5vw; margin-top: 0.5vh; color: white">FRASE</h1>
+                    <h1 style="font-family:'Brush Script MT'; font-size: 1.5vw; margin-top: 0.5vh">FRASE</h1>
                 </div>
             </div>
             <div class="col" style="margin-top:0">
-                <div class="d-flex justify-content-end rounded-circle btn">
+                <div class="d-flex justify-content-end">
                     @if (BancoDeDados.CheckProfileExists(cookieValue) == false)
                     {
-                        <img onclick="OpenUserProfile(@cookieValue)" class="rounded-circle border border-dark" style="width: 6%; height: 3.62vh" src="~/user.png" alt="Você" />
+                        <img onclick="OpenUserProfile(@cookieValue)" class="rounded-circle border border-dark" style="width: 8%; height: 4.5vh; cursor:pointer" src="~/user.png" alt="Você" />
                     }
                     else
                     {
-                        <img onclick="OpenUserProfile(@cookieValue)" class="rounded-circle border border-dark" style="width: 6%; height: 3.62vh" src="@BancoDeDados.GetProfilePic(cookieValue)" alt="Você" />
+                        <img onclick="OpenUserProfile(@cookieValue)" class="rounded-circle border border-dark" style="width: 8%; height: 4.5vh; cursor:pointer" src="@BancoDeDados.GetProfilePic(cookieValue)" alt="Você" />
                     }
                 </div>
             </div>
