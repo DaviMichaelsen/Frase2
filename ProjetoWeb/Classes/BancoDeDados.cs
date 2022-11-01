@@ -26,7 +26,7 @@ namespace ProjetoWeb.Classes
         private static void Initialize()
         {
             //server = "localhost";
-            server = "10.200.116.71";
+            server = "192.168.1.103";
             //database = "connectcsharptomysql";
             database = "Frase";
             //uid = "username";
@@ -976,5 +976,73 @@ namespace ProjetoWeb.Classes
             }
             return result;
         }
+
+
+        //----------------------------------------------------PDF-------------------------------------------------
+
+        public static string GetPostsNumber(DateTime date)
+        {
+            string query = $"SELECT COUNT(*) from Mensagem WHERE momento >= '{date.ToString("yyyy-MM-dd")}'";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                string result = cmd.ExecuteScalar().ToString();
+
+                CloseConnection();
+
+                return result;
+            }
+
+            return "erro";
+        }
+
+        public static string GetConnectedUsers()
+        {
+            string query = "SELECT COUNT(*) FROM Seguidores";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                string result = cmd.ExecuteScalar().ToString();
+
+                CloseConnection();
+
+                return result;
+            }
+
+            return "erro";
+        }
+
+        public static string GetMostRelevantUser(out string quantidade)
+        {
+            string query = "SELECT Usuario.id, Usuario.login, COUNT(Usuario.id) FROM Usuario INNER JOIN Seguidores where Usuario.id = seguidores.seguido GROUP BY Usuario.id ORDER BY COUNT(Usuario.id) DESC";
+
+            if(OpenConnection() == true)
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                reader.Read();
+
+                quantidade = reader[2].ToString();
+
+                string result = reader[1].ToString();
+
+                reader.Close();
+
+                CloseConnection();
+
+                return result;
+            }
+
+            quantidade = "erro";
+            return "erro";
+        }
     }
+
+
 }

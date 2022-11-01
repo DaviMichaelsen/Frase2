@@ -1,0 +1,102 @@
+﻿@using ProjetoWeb.Classes;
+@using System.IO;
+@using iTextSharp.text;
+@using iTextSharp.text.pdf;
+@{
+    Layout = null;
+    HttpCookie id = new HttpCookie("wtver");
+    HttpCookie isDono = new HttpCookie("asusd");
+    string cookieValue = "waiting";
+}
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <script>
+        @{
+            id = Request.Cookies["userId"];
+
+            if (id != null)
+            {
+                cookieValue = Context.Request.Cookies["userId"].Value.Split('=')[1];
+                if (BancoDeDados.IsMod(cookieValue) || BancoDeDados.IsDono(cookieValue))
+                {
+                    Document doc = new Document(PageSize.A4, 10, 10, 42, 35);
+                    PdfWriter pdf = PdfWriter.GetInstance(doc, Response.OutputStream);
+
+                    //------------------------------------------//--------------------------------------------
+
+
+                    //MODIFICAÇÕES DO PDF
+                    Paragraph relPosts = new Paragraph("quantidade de Posts:");
+                    Paragraph newLine = new Paragraph(Environment.NewLine);
+                    Chunk chunk = new Chunk("Relatório", FontFactory.GetFont("Arial", 20, Font.BOLDITALIC, BaseColor.BLACK));
+
+                    PdfPTable mostActive = new PdfPTable(2);
+                    mostActive.WidthPercentage = 100;
+                    mostActive.HorizontalAlignment = 0;
+                    mostActive.SpacingBefore = 20f;
+                    mostActive.SpacingAfter = 30f;
+
+                    mostActive.AddCell(new Paragraph("Contando a partir de:", FontFactory.GetFont("Arial", 16, Font.BOLDITALIC, BaseColor.BLACK)));
+                    mostActive.AddCell(new Paragraph("Quantidade de Posts:", FontFactory.GetFont("Arial", 16, Font.BOLDITALIC, BaseColor.BLACK)));
+                    mostActive.AddCell("Hoje");
+                    mostActive.AddCell(BancoDeDados.GetPostsNumber(DateTime.Now));
+                    mostActive.AddCell("Em uma semana");
+                    mostActive.AddCell(BancoDeDados.GetPostsNumber(DateTime.Now.AddDays(-7)));
+                    mostActive.AddCell("Em um mês");
+                    mostActive.AddCell(BancoDeDados.GetPostsNumber(DateTime.Now.AddDays(-30)));
+
+                    Paragraph otherStatsPar = new Paragraph("Outras estatisticas relevantes:");
+
+                    string quantidadeRelevancia;
+                    PdfPTable others = new PdfPTable(2);
+                    others.WidthPercentage = 100;
+                    others.HorizontalAlignment = 0;
+                    others.SpacingBefore = 20f;
+                    others.SpacingAfter = 30f;
+
+                    others.AddCell("Usuarios conectados");
+                    others.AddCell(BancoDeDados.GetConnectedUsers());
+                    others.AddCell("Usuario mais relevante");
+                    others.AddCell($"{BancoDeDados.GetMostRelevantUser(out quantidadeRelevancia)}({quantidadeRelevancia})");
+
+                    Paragraph conectados = new Paragraph("Usuarios conectados: É a soma da quantidade de seguidores de todos os usuarios. Determina quantos usuarios estão conectados.");
+                    Paragraph relevante = new Paragraph("Usuario mais relevante: É o usuario que possui mais seguidores na rede social. Determina qual usuario tem mais relevancia e alcance.");
+
+
+
+                    //------------------------------------------//--------------------------------------------
+
+                    doc.Open();
+                    pdf.CloseStream = false;
+                    doc.Add(chunk);
+                    doc.Add(newLine);
+                    doc.Add(newLine);
+                    doc.Add(relPosts);
+                    doc.Add(mostActive);
+                    doc.Add(newLine);
+                    doc.Add(otherStatsPar);
+                    doc.Add(others);
+                    doc.Add(newLine);
+                    doc.Add(conectados);
+                    doc.Add(newLine);
+                    doc.Add(relevante);
+                    pdf.Close();
+                    Response.Buffer = true;
+                    Response.ContentType = "application/pdf";
+                    Response.AddHeader("content-disposition", $"attachment;filename=Relatorio_{DateTime.Now.ToString()}.pdf");
+                    Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                    Response.Write(pdf);
+                    Response.End();
+                }
+                Response.Redirect("index.cshtml");
+            }
+            Response.Redirect("index.cshtml");
+        }
+    </script>
+</body>
+</html>
+
+
